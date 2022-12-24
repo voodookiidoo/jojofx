@@ -6,6 +6,7 @@ module jvfxproject {
 	requires javafx.media;
 	requires javafx.web;
 	requires java.sql;
+	requires spring.jdbc;
 	exports controllers;
 	exports models;
 	opens controllers;
