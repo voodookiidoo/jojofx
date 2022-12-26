@@ -13,11 +13,11 @@
 	<VBox>
 		<TableView fx:id="militaryDistrictTable">
 			<columns>
-				<TableColumn fx:id="mildistrict_id">
+				<TableColumn fx:id="mildistrict_id" text="id">
 				</TableColumn>
-				<TableColumn fx:id="mildistrict_name">
+				<TableColumn fx:id="mildistrict_name" text="Name">
 				</TableColumn>
-				<TableColumn fx:id="mildistrict_place">
+				<TableColumn fx:id="mildistrict_place" text="Place">
 
 				</TableColumn>
 			</columns>

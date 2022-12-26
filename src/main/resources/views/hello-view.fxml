@@ -5,12 +5,17 @@
 <VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.MainApplicationController">
 	<TabPane fx:id="tabPane" prefHeight="800" prefWidth="600" tabMinWidth="100">
-		<Tab fx:id="militaryDistrictTab" closable="false">
-			<fx:include source="milDistrictTab.fxml"/>
-
+		<Tab  closable="false" text="MilitaryDistricts">
+			<fx:include fx:id="militaryDistrictTab" source="milDistrictTab.fxml"/>
 		</Tab>
-		<Tab>
-			<Label text="sus"/>
+		<Tab  closable="false" text="Officers">
+			<fx:include fx:id="officerTab" source="officerTab.fxml"/>
+		</Tab>
+		<Tab closable="false" text="Armies" onSelectionChanged="#updateArmy" >
+			<fx:include fx:id="armyTab" source="armyTab.fxml"/>
+		</Tab>
+		<Tab closable="false" text="Tactic Units" onSelectionChanged="#updateTacticUnit">
+			<fx:include source="tacticUnitTab.fxml" fx:id="tacticUnitTab"/>
 		</Tab>
 	</TabPane>
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.TacticUnitController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="tacticUnitTable">
+			<columns>
+				<TableColumn fx:id="id" text="id"/>
+				<TableColumn fx:id="fullname" text="FullName"/>
+				<TableColumn fx:id="army_id" text="Army id"/>
+				<TableColumn fx:id="unit_type" text="Unit type"/>
+				<TableColumn fx:id="unit_number" text="Unit number"/>
+			</columns>
+		</TableView>
+		<Label text="Commanders"/>
+		<ChoiceBox fx:id="possibleCommanders"/>
+		<Label text="Army id"/>
+		<TextField fx:id="armyIdField"/>
+		<Label text="unit number "/>
+		<TextField fx:id="unitNumField"/>
+		<Label text="unit type "/>
+		<TextField fx:id="unitTypeField"/>
+
+		<Button fx:id="addBtn" text="Add unit" onMouseClicked="#addTacticUnit"/>
+		<Button fx:id="editBtn" text="Edit unit data " onMouseClicked="#editTacticUnit" />
+		<Button fx:id="delBtn" text="Delete unit data" />
+	</VBox>
+
+
+</AnchorPane>

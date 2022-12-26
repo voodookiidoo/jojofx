@@ -1,17 +1,22 @@
 package controllers;
 
 import dao.Dao;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 
-public class MainApplicationController {
-	// фабрики для заполнения столбцов таблицы
+import java.io.IOException;
 
-	// Объект соединения
+public class MainApplicationController {
 	private static Dao dao = new Dao();
+	@FXML
+	public ArmyTabController armyTabController;
+	@FXML
+	public TacticUnitController tacticUnitTabController;
 
 	public static Dao getDao() {
 		return dao;
 	}
+
 
 	@FXML
 	public void stop() throws Exception {
@@ -19,9 +24,15 @@ public class MainApplicationController {
 
 	@FXML
 	private void initialize() {
-		dao = new Dao(); // initialize dao
-
+		System.out.println("i am inintializing");
+		dao = new Dao();
 	}
 
+	public void updateArmy(Event event) throws IOException {
+		armyTabController.globalUpdate();
+	}
 
+	public void updateTacticUnit(Event event) {
+		tacticUnitTabController.globalUpdate();
+	}
 }

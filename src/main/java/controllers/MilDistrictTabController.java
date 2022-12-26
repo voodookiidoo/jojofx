@@ -35,6 +35,7 @@ public class MilDistrictTabController {
 		mildistrict_place.setCellValueFactory(mildistrictPlaceFactory);
 		militaryDistrictObservableList.addAll(MainApplicationController.getDao().getMilitaryDistricts());
 		militaryDistrictTable.setItems(militaryDistrictObservableList);
+
 	}
 
 }

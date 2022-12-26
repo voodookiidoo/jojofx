@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ArmyTabController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="armyTable">
+			<columns>
+				<TableColumn fx:id="id" text="id"/>
+				<TableColumn fx:id="fullname" text="FullName"/>
+				<TableColumn fx:id="army_number" text="Army Number"/>
+			</columns>
+		</TableView>
+		<Label text="Commanders"/>
+		<ChoiceBox fx:id="possibleCommanders"/>
+		<Label text="army number "/>
+		<TextField fx:id="armyNumTextField"/>
+		<Button fx:id="addBtn" text="Add army" onMouseClicked="#addArmy"/>
+		<Button fx:id="editBtn" text="Edit army data" onMouseClicked="#editArmy"/>
+		<Button fx:id="delBtn" text="Delete army data" onMouseClicked="#delArmy"/>
+	</VBox>
+
+</AnchorPane>
