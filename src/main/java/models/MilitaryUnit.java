@@ -9,6 +9,32 @@ public class MilitaryUnit {
 	final private SimpleIntegerProperty commander_id = new SimpleIntegerProperty();
 	final private SimpleIntegerProperty part_number = new SimpleIntegerProperty();
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		MilitaryUnit that = (MilitaryUnit) o;
+
+		if (! id.equals(that.id)) return false;
+		if (! tactic_unit_id.equals(that.tactic_unit_id))
+			return false;
+		if (! mil_district_id.equals(that.mil_district_id))
+			return false;
+		if (! commander_id.equals(that.commander_id)) return false;
+		return part_number.equals(that.part_number);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + tactic_unit_id.hashCode();
+		result = 31 * result + mil_district_id.hashCode();
+		result = 31 * result + commander_id.hashCode();
+		result = 31 * result + part_number.hashCode();
+		return result;
+	}
+
 	public MilitaryUnit(int id, int tacticId, int milDistrictId, int commanderId, int partNumber) {
 		this.id.set(id);
 		this.tactic_unit_id.set(tacticId);
@@ -76,5 +102,6 @@ public class MilitaryUnit {
 	public SimpleIntegerProperty part_numberProperty() {
 		return part_number;
 	}
+
 
 }

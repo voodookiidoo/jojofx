@@ -64,6 +64,26 @@ public class MilitaryDistrict {
 		return place;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		MilitaryDistrict that = (MilitaryDistrict) o;
+
+		if (id != null ? ! id.equals(that.id) : that.id != null) return false;
+		if (name != null ? ! name.equals(that.name) : that.name != null) return false;
+		return place != null ? place.equals(that.place) : that.place == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (place != null ? place.hashCode() : 0);
+		return result;
+	}
+
 	public static class MilitaryDistrictPropertyMapper implements RowMapper<MilitaryDistrict> {
 
 		@Override

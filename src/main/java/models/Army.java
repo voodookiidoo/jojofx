@@ -7,6 +7,7 @@ import util.StringUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Army {
 
@@ -55,7 +56,28 @@ public class Army {
 		return army_number;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Army army = (Army) o;
+
+		if (! Objects.equals(id, army.id)) return false;
+		if (! Objects.equals(army_number, army.army_number)) return false;
+		return Objects.equals(fullname, army.fullname);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (army_number != null ? army_number.hashCode() : 0);
+		result = 31 * result + (fullname != null ? fullname.hashCode() : 0);
+		return result;
+	}
+
 	public static class ArmyRowMapper implements RowMapper<Army> {
+
 		@Override
 		public Army mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String fullname = rs.getString("fullname");

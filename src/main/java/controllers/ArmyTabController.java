@@ -48,11 +48,34 @@ public class ArmyTabController implements TabController<Army>, MilitaryObject<Ar
 	@Override
 	public void updateFreeOfficers() {
 		updateFreeOfficers(Army.class);
-		possibleCommanders.getValue();
+	}
+
+	@Override
+	public void addObj() {
+		addObj(Army.class);
+	}
+
+	@Override
+	public TextField getHigherIdField() {
+		return null;
+	}
+
+	@Override
+	public TextField getNumField() {
+		return armyNumTextField;
+	}
+
+	@Override
+	public void updateCommander() {
+		Army army = getSelectedRow();
+		if (army == null) return;
+		if (possibleCommanders.getValue().equals(army.getFullname()));
+		updateCommander(Army.class, army.getId());
 	}
 
 	@Override
 	public ChoiceBox<String> getFreeOfficerBox() {
+
 		return possibleCommanders;
 	}
 
@@ -148,17 +171,17 @@ public class ArmyTabController implements TabController<Army>, MilitaryObject<Ar
 				possibleCommanders.setValue(army.getFullname());
 				army.setFullname(commanderName);
 			}
-//			updateFreeOfficers();
+			updateFreeOfficers();
 		}
 	}
+
 
 	public void delArmy(MouseEvent mouseEvent) {
 		Army army = getSelectedRow();
 		if (army == null) return;
-		MainApplicationController.getDao().deleteArmyById(army.getId());
+		MainApplicationController.getDao().deleteObjById(Army.class, army.getId());
 		armyTable.getItems().remove(army);
-		System.out.println("TRYING TO UPDATE FREE OFFICERS");
-		if (! army.getFullname().equals("NOT SELECTED")) {
+		if (! army.getFullname().equals(StringUtil.UNSELECTED)) {
 			freeOfficers.add(army.getFullname());
 			possibleCommanders.getItems().add(army.getFullname());
 		}

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.skin.TabPaneSkin.TabHeaderArea?>
 <VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.MainApplicationController">
 	<TabPane fx:id="tabPane" prefHeight="800" prefWidth="600" tabMinWidth="100">
@@ -16,6 +17,9 @@
 		</Tab>
 		<Tab closable="false" text="Tactic Units" onSelectionChanged="#updateTacticUnit">
 			<fx:include source="tacticUnitTab.fxml" fx:id="tacticUnitTab"/>
+		</Tab>
+		<Tab closable="false" text="Companies" onSelectionChanged="#updateCompanies">
+			<fx:include source="companyTab.fxml" fx:id="companyTab"/>
 		</Tab>
 	</TabPane>
 

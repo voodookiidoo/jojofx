@@ -12,6 +12,8 @@ public class MainApplicationController {
 	public ArmyTabController armyTabController;
 	@FXML
 	public TacticUnitController tacticUnitTabController;
+	@FXML
+	CompanyTabController companyTabController;
 
 	public static Dao getDao() {
 		return dao;
@@ -34,5 +36,9 @@ public class MainApplicationController {
 
 	public void updateTacticUnit(Event event) {
 		tacticUnitTabController.globalUpdate();
+	}
+
+	public void updateCompanies(Event event) {
+		companyTabController.globalUpdate();
 	}
 }

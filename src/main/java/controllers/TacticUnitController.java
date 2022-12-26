@@ -31,7 +31,6 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 	public TextField armyIdField, unitNumField, unitTypeField;
 	@FXML
 	public Button addBtn, editBtn, delBtn;
-	List<String> freeOfficers = new ArrayList<>();
 	@FXML
 	ObservableList<TacticUnit> tacticUnits = FXCollections.observableList(new ArrayList<>());
 
@@ -47,9 +46,34 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 		updateFreeOfficers();
 
 	}
+
+
 	@Override
 	public void updateFreeOfficers() {
 		updateFreeOfficers(TacticUnit.class);
+	}
+
+	@Override
+	public void addObj() {
+		addObj(TacticUnit.class);
+	}
+
+	@Override
+	public TextField getHigherIdField() {
+		return armyIdField;
+	}
+
+	@Override
+	public TextField getNumField() {
+		return unitNumField;
+	}
+
+	@Override
+	public void updateCommander() {
+		TacticUnit unit = getSelectedRow();
+		if (unit == null) return;
+		if (possibleCommanders.getValue().equals(unit.getCommanderName()))return;
+		updateCommander(TacticUnit.class, unit.getId());
 	}
 
 	@Override
@@ -63,17 +87,20 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 		int armyId = Integer.parseInt(armyIdField.getText());
 		String unitType = unitTypeField.getText();
 		if (possibleCommanders.getValue().equals(StringUtil.UNSELECTED)) {
-			MainApplicationController.getDao().addTacticUnitNoCommander(
-					armyId, unitType, unitNum
-			);
-			localUpdate();
+//			MainApplicationController.getDao().addTacticUnitNoCommander(
+//					armyId, unitType, unitNum
+//			);
+//			localUpdate();
+			updateCommander();
 		} else if (! possibleCommanders.getValue().equals(StringUtil.KEEP)) {
-			String commanderName = possibleCommanders.getValue();
-			MainApplicationController.getDao().addTacticUnit(
-					armyId, commanderName, unitType, unitNum
-			);
-			localUpdate();
+//			String commanderName = possibleCommanders.getValue();
+//			MainApplicationController.getDao().addTacticUnit(
+//					armyId, commanderName, unitType, unitNum
+//			);
+//			localUpdate();
+			updateCommander();
 		}
+		updateFreeOfficers();
 	}
 
 	@Override
@@ -116,28 +143,38 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 					&& ! unit.getCommanderName().equals(StringUtil.UNSELECTED))
 			// если текущий командир выбран а нужно снять его
 			{
-				System.out.println(1);
 				MainApplicationController.getDao().setNullTacticUnitCommander(unitId);
-				possibleCommanders.getItems().add(commanderName);
+//				possibleCommanders.getItems().add(commanderName);
 				unit.setCommanderName(StringUtil.UNSELECTED);
+				System.out.println(1);
 			} else if (! commanderName.equals(StringUtil.UNSELECTED)
 					&& unit.getCommanderName().equals(StringUtil.UNSELECTED)) {// если текущий командир не выбран, а его нужно назначить
 				MainApplicationController.getDao().setTacticUnitCommander(commanderName, unitId);
-				System.out.println(2);
 				unit.setCommanderName(commanderName);
 				possibleCommanders.getItems().remove(commanderName);
+				possibleCommanders.setValue(StringUtil.UNSELECTED);
+				System.out.println(2);
 			} else if (! commanderName.equals(StringUtil.UNSELECTED)
 					&& ! unit.getCommanderName().equals(StringUtil.UNSELECTED)) { // если текущий командир выбран, и нужно назначить нового
 				MainApplicationController.getDao().setTacticUnitCommander(commanderName, unitId);
-				System.out.println(3);
 				// убрать из возможных командиров того кого только назначили
 				possibleCommanders.getItems().remove(commanderName);
 				// добавить того кто освободился
 				possibleCommanders.getItems().add(unit.getCommanderName());
-				possibleCommanders.setValue(unit.getCommanderName());
+				possibleCommanders.setValue(StringUtil.UNSELECTED);
 				unit.setCommanderName(commanderName);
+				System.out.println(3);
 			}
-			updateFreeOfficers();
 		}
+	}
+
+	public void deleteTacticUnit(MouseEvent mouseEvent) {
+		TacticUnit unit = getSelectedRow();
+		if (unit == null) return;
+		deleteById(TacticUnit.class, unit.getId());
+		if (! unit.getCommanderName().equals(StringUtil.UNSELECTED)) {
+			possibleCommanders.getItems().add(unit.getCommanderName());
+		}
+		getTable().getItems().remove(unit);
 	}
 }

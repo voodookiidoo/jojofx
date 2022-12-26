@@ -7,6 +7,7 @@ import util.StringUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class TacticUnit {
@@ -81,6 +82,30 @@ public class TacticUnit {
 
 	public void setUnitType(String unitType) {
 		this.unitType.set(unitType);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		TacticUnit unit = (TacticUnit) o;
+
+		if (! Objects.equals(id, unit.id)) return false;
+		if (! Objects.equals(armyId, unit.armyId)) return false;
+		if (! Objects.equals(unitNumber, unit.unitNumber)) return false;
+		if (! Objects.equals(unitType, unit.unitType)) return false;
+		return Objects.equals(commanderName, unit.commanderName);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + armyId.hashCode();
+		result = 31 * result + unitNumber.hashCode();
+		result = 31 * result + unitType.hashCode();
+		result = 31 * result + commanderName.hashCode();
+		return result;
 	}
 
 	public SimpleStringProperty unitTypeProperty() {

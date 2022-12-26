@@ -31,7 +31,7 @@
 
 		<Button fx:id="addBtn" text="Add unit" onMouseClicked="#addTacticUnit"/>
 		<Button fx:id="editBtn" text="Edit unit data " onMouseClicked="#editTacticUnit" />
-		<Button fx:id="delBtn" text="Delete unit data" />
+		<Button fx:id="delBtn" text="Delete unit data" onMouseClicked="#deleteTacticUnit" />
 	</VBox>
 
 

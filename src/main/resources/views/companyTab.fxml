@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CompanyTabController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="companyTable">
+			<columns>
+				<TableColumn fx:id="id" text="id"/>
+				<TableColumn fx:id="fullname" text="FullName"/>
+				<TableColumn fx:id="company_number" text="Army Number"/>
+				<TableColumn fx:id="unit_id" text="Unit id"/>
+			</columns>
+		</TableView>
+		<Label text="Commanders"/>
+		<ChoiceBox fx:id="possibleCommanders"/>
+		<Label text="company number "/>
+		<TextField fx:id="companyNumTextField"/>
+		<Label text="unit id"/>
+		<TextField fx:id="unitIdTextField"/>
+		<Button fx:id="addBtn" text="Add company" onMouseClicked="#addCompany"/>
+		<Button fx:id="editBtn" text="Edit company data" onMouseClicked="#editCompany"/>
+		<Button fx:id="delBtn" text="Delete company data" onMouseClicked="#delCompany"/>
+	</VBox>
+
+</AnchorPane>

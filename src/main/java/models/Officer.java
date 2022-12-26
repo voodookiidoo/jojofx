@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Officer {
 	final private SimpleIntegerProperty id;
@@ -127,6 +128,35 @@ public class Officer {
 				", major=" + major.get() +
 				", commType=" + commType.get() +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Officer officer = (Officer) o;
+
+		if (! Objects.equals(id, officer.id)) return false;
+		if (! Objects.equals(fullname, officer.fullname)) return false;
+		if (! Objects.equals(militaryRank, officer.militaryRank))
+			return false;
+		if (! Objects.equals(education, officer.education)) return false;
+		if (! Objects.equals(rankDate, officer.rankDate)) return false;
+		if (! Objects.equals(major, officer.major)) return false;
+		return Objects.equals(commType, officer.commType);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (fullname != null ? fullname.hashCode() : 0);
+		result = 31 * result + (militaryRank != null ? militaryRank.hashCode() : 0);
+		result = 31 * result + (education != null ? education.hashCode() : 0);
+		result = 31 * result + (rankDate != null ? rankDate.hashCode() : 0);
+		result = 31 * result + (major != null ? major.hashCode() : 0);
+		result = 31 * result + (commType != null ? commType.hashCode() : 0);
+		return result;
 	}
 
 	public static class OfficerRowMapper implements RowMapper<Officer>
