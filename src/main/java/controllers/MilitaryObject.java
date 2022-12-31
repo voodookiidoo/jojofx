@@ -32,6 +32,7 @@ public interface MilitaryObject<T> {
 
 	public void addObj();
 
+
 	/**
 	 * @param cls Reflecting class of an object to be added
 	 */
@@ -42,21 +43,19 @@ public interface MilitaryObject<T> {
 		int objNum = Integer.parseInt(getNumField().getText());
 		String commanderName = getFreeOfficerBox().getValue();
 		if (commanderName.equals(StringUtil.UNSELECTED)) {
-			commanderName = null;
-		}
-		if (commanderName.equals(StringUtil.UNSELECTED)) {
 			// если командир не назначен, провести добавление без него
+			MainApplicationController.getDao().addObj(
+					cls, upId, null, objNum
+			);
+			// установить отсутствие командира в боксе
+			getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
+		}
+		else {//если командир для назначения присутствует
 			MainApplicationController.getDao().addObj(
 					cls, upId, commanderName, objNum
 			);
-			// удалить командира из списка доступных
-			if (commanderName != null) {
-				getFreeOfficerBox().getItems().remove(
-						commanderName
-				);
-				// установить отсутствие командира в боксе
-				getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
-			}
+			getFreeOfficerBox().getItems().remove(commanderName);
+			getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
 		}
 	}
 

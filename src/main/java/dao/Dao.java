@@ -3,7 +3,9 @@ package dao;
 import models.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import util.StringUtil;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +17,13 @@ public class Dao {
 		put(TacticUnit.class, "tacticunit");
 		put(MilitaryDistrict.class, "mildistrict");
 		put(MilitaryUnit.class, "milunit");
+		put(Company.class, "company");
+
 	}};
 	private static final Map<Class<?>, String> upperTableNamesMap = new HashMap<>() {{
-		//TODO добавить связи для класса сущности и названия таблицы рангом выше
 		put(TacticUnit.class, "army");
+		put(MilitaryUnit.class, "tacticunit");
+		put(Company.class, "milunit");
 
 	}};
 	private final JdbcTemplate jdbcTemplate;
@@ -36,7 +41,13 @@ public class Dao {
 
 	public static void main(String... args) {
 		Dao dao = new Dao();
-		System.out.println(dao.getFreeOfficersForClass(Army.class));
+		dao.updateCommanderForObj(Company.class, 1, "dave");
+	}
+
+	public <T> void updateCommanderForObj(Class<T> cls, int id, String commanderName) {
+		String tableName = tableNamesMap.get(cls);
+		String sqlString = "update %s set commander_id=(select id from officers where fullname=?) where id=?".formatted(tableName);
+		jdbcTemplate.update(sqlString, commanderName, id);
 	}
 
 	/**
@@ -100,7 +111,6 @@ public class Dao {
 		);
 	}
 
-
 	public void addTacticUnitNoCommander(int armyId, String unitType, int unitNum) {
 		jdbcTemplate.update(
 				"insert into tacticunit(army_id, unit_type, unit_number) " +
@@ -124,7 +134,6 @@ public class Dao {
 				commanderName, unitId);
 	}
 
-
 	/**
 	 * @param cls Reflecting class of the object to be deleted
 	 * @param id  Id of the object to be deleted
@@ -137,7 +146,6 @@ public class Dao {
 		jdbcTemplate.update(sqlString, id);
 	}
 
-
 	/**
 	 * @param cls           Reflecting class of the object to be added
 	 * @param upId          id of the higher entity to be referenced at
@@ -146,19 +154,89 @@ public class Dao {
 	 */
 	public <T> void addObj(Class<T> cls, int upId, String commanderName, int objNum) {
 		String tableName = tableNamesMap.get(cls);
-		String higherTableName = null;
+		String higherTableName = upperTableNamesMap.get(cls);
+		if (StringUtil.UNSELECTED.equals(commanderName)) {
+			String sqlString = "insert into %s (commander_id, %s_number, %s_id) values (null,?,?)".formatted(tableName,
+					tableName,
+					higherTableName);
+			jdbcTemplate.update(sqlString,
+					objNum, upId);
+		} else {
+			String sqlString = "insert into %s (commander_id, %s_number,%s_id) values ((select id from officers where fullname = ?), ?,?)".formatted(
+					tableName, tableName, higherTableName
+			);
+			jdbcTemplate.update(
+					sqlString,
+					commanderName,
+					objNum,
+					upId
+			);
+//				officerName, armyNum)
+
+		}
+//		jdbcTemplate.update("insert into army (commander_id, army_number)" +
+//						"values ((select id from officers where fullname = ?), ?);",
+//				officerName, armyNum)
+
 
 	}
 
-	public <T> void updateCommanderForObj(Class<T> cls, int id, String commanderName) {
-		String tableName = tableNamesMap.get(cls);
-		String sqlString = "update %s set commander_id=(select id from officers where fullname=?) where id=?".formatted(tableName);
-		jdbcTemplate.update(sqlString, commanderName, id);
+	public <T> void updateHigherObjId(Class<T> cls, int id, int upId) {
+		//TODO реализовать обновление айдишника сущности выше по рангу
+	}
+
+	public <T> void updateOjbNum(Class<T> cls, int id, int objNum) {
+		//TODO реализовать обновление номера объекта
 	}
 
 	public List<Company> getCompanies() {
 		return jdbcTemplate.query(
 				"select company.id, company_number, company.milunit_id, officers.fullname from company left join officers on company.commander_id = officers.id", new Company.CompanyRowMapper()
+		);
+	}
+
+	public void addOfficer(String name, String milRank, String education, LocalDate date, String major, String commType) {
+		String sqlString = "insert into officers(" +
+				"fullname, military_rank," +
+				"education, rank_date," +
+				"major, comm_type) values " +
+				"(?,?,?,?,?,?)";
+		jdbcTemplate.update(sqlString,
+				name, milRank, education,
+				date, major, commType);
+	}
+
+	public void updateOfficerDate(int id, LocalDate date) {
+		jdbcTemplate.update(
+				"update officers set rank_date=? where id=?",
+				date, id);
+	}
+
+	public void updateOfficerName(int id, String name) {
+		jdbcTemplate.update("update officers set fullname=? where id=?",
+				name, id);
+	}
+
+	public void updateOfficerEducation(int id, String education) {
+		jdbcTemplate.update("update officers set education=? where id=?",
+				education, id);
+	}
+
+	public void updateOfficerMajor(int id, String major) {
+		jdbcTemplate.update("update officers set major=? where id=?",
+				major, id);
+	}
+
+	public void updateOfficerType(int id, String type) {
+		jdbcTemplate.update("update officers set comm_type=? where id=?",
+				type, id);
+
+	}
+
+	public void deleteOfficerById(int id) {
+		jdbcTemplate.update(
+				"delete from officers where id=?",
+				id
 		);
 	}
 }

@@ -7,9 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import models.Company;
+import util.StringUtil;
 
 import java.util.ArrayList;
 
+//TODO добавление, редактирование, удаление
 public class CompanyTabController implements MilitaryObject<Company>, TabController<Company> {
 	@FXML
 	public TableView<Company> companyTable;
@@ -27,15 +29,17 @@ public class CompanyTabController implements MilitaryObject<Company>, TabControl
 	@FXML
 	public PropertyValueFactory<Object, Object>
 			idValFactory = new PropertyValueFactory<>("id"),
-			fullnameValFactory = new PropertyValueFactory<>("fullname"),
-			companyNumValFactory = new PropertyValueFactory<>("company_number"),
-			unitIdValFactory = new PropertyValueFactory<>("unit_id");
+			fullnameValFactory = new PropertyValueFactory<>("commanderName"),
+			companyNumValFactory = new PropertyValueFactory<>("companyNumber"),
+			unitIdValFactory = new PropertyValueFactory<>("unitId");
 
 
 	@Override
 	public void updateCommander() {
+
 		Company company = getSelectedRow();
 		if (company == null) return;
+		System.out.println("UPDATING");
 		if (getFreeOfficerBox().getValue().equals(company.getCommanderName())) return;
 		updateCommander(Company.class, company.getId());
 	}
@@ -49,6 +53,7 @@ public class CompanyTabController implements MilitaryObject<Company>, TabControl
 	public void addObj() {
 		if (! inputDataValid()) return;
 		addObj(Company.class);
+		localUpdate();
 	}
 
 	@Override
@@ -93,6 +98,8 @@ public class CompanyTabController implements MilitaryObject<Company>, TabControl
 
 	@Override
 	public void globalUpdate() {
+		companies.clear();
+		companies.addAll(MainApplicationController.getDao().getCompanies());
 		updateFreeOfficers();
 	}
 
@@ -102,13 +109,39 @@ public class CompanyTabController implements MilitaryObject<Company>, TabControl
 	}
 
 	public void editCompany(MouseEvent mouseEvent) {
+		Company company = getSelectedRow();
+		if (company == null) return;
+		String commanderName = getFreeOfficerBox().getValue();
+		if (! commanderName.equals(StringUtil.KEEP)) {
+			if (commanderName.equals(StringUtil.UNSELECTED)
+					&& ! company.getCommanderName().equals(StringUtil.UNSELECTED)) {
+				// если требуется снять командира, а командир назначен
+				MainApplicationController.getDao().updateCommanderForObj(
+						Company.class, company.getId(), commanderName
+				);
+				// добавить командира в список доступных
+				getFreeOfficerBox().getItems().add(company.getCommanderName());
+				getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
+				company.setCommanderName(StringUtil.UNSELECTED);
+			} else if (! commanderName.equals(StringUtil.UNSELECTED)
+					&& company.getCommanderName().equals(StringUtil.UNSELECTED)) {
+				// если командир не назначен, но его нужно назначить
+				MainApplicationController.getDao().updateCommanderForObj(
+						Company.class, company.getId(), commanderName
+				);
+				// командир назначен, значит из доступных его нужно удалить
+				getFreeOfficerBox().getItems().remove(commanderName);
+				getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
+				company.setCommanderName(commanderName);
+
+			}
+		}
 	}
 
 
 	public void delCompany(MouseEvent mouseEvent) {
 		Company company = getSelectedRow();
 		if (company == null) return;
-		if (getFreeOfficerBox().getValue().equals(company.getCommanderName())) return;
 		deleteById(Company.class, company.getId());
 		companies.remove(company);
 	}

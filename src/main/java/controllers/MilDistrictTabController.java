@@ -3,7 +3,6 @@ package controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -11,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import models.MilitaryDistrict;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MilDistrictTabController implements TabController<MilitaryDistrict> {
 	@FXML
@@ -23,11 +21,9 @@ public class MilDistrictTabController implements TabController<MilitaryDistrict>
 	@FXML
 	public TableView militaryDistrictTable;
 	@FXML
-	public TableColumn mildistrict_id;
+	public TableColumn mildistrict_id, mildistrict_name, mildistrict_place;
 	@FXML
-	public TableColumn mildistrict_name;
-	@FXML
-	public TableColumn mildistrict_place;
+	public TextField districtNameField, districtPlace;
 	// создание столбцов для отображения
 	@FXML
 	ObservableList<MilitaryDistrict> militaryDistrictObservableList = FXCollections.observableList(new ArrayList<>());

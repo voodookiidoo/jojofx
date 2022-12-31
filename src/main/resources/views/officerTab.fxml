@@ -6,10 +6,10 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.OfficerTabController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="200.0" prefWidth="400.0">
 	<VBox>
 
-		<TableView fx:id="officerTable">
+		<TableView fx:id="officerTable" prefHeight="300">
 			<columns>
 				<TableColumn fx:id="id" text="id"/>
 				<TableColumn fx:id="fullname" text="fullname"/>
@@ -20,5 +20,20 @@
 				<TableColumn fx:id="commType"/>
 			</columns>
 		</TableView>
+		<Button text="Add officer" onMouseClicked="#addOfficer"/>
+		<Button text="Edit officer data" onMouseClicked="#editOfficer"/>
+		<Button text="Deleter officer" onMouseClicked="#deleteOfficer"/>
+		<Label text="Name"/>
+		<TextField fx:id="nameField"/>
+		<Label text="Military rank"/>
+		<TextField fx:id="milRankField"/>
+		<Label text="Rank signing date"/>
+		<DatePicker fx:id="rankDatePicker"/>
+		<Label text="Education"/>
+		<TextField fx:id="educationField"/>
+		<Label text="Major"/>
+		<TextField fx:id="majorField"/>
+		<Label text="type"/>
+		<ChoiceBox fx:id="typeBox"/>
 	</VBox>
 </AnchorPane>
