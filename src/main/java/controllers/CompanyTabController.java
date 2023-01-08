@@ -144,5 +144,6 @@ public class CompanyTabController implements MilitaryObject<Company>, TabControl
 		if (company == null) return;
 		deleteById(Company.class, company.getId());
 		companies.remove(company);
+		updateFreeOfficers();
 	}
 }

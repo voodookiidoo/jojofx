@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.MilUnitTabController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="milUnitTable">
+			<columns>
+				<TableColumn fx:id="milUnitId" text="id"/>
+				<TableColumn fx:id="commanderName" text="Name"/>
+				<TableColumn fx:id="tacticUnitId" text="Tactic Unit id"/>
+				<TableColumn fx:id="milDistrictId" text="Military District id"/>
+				<TableColumn fx:id="milUnitNum" text="Military Unit Number"/>
+			</columns>
+		</TableView>
+		<ChoiceBox fx:id="officerBox"/>
+
+		<Label text="Tactic Unit id"/>
+		<TextField fx:id="tacticUnitIdField"/>
+		<Label text="District id"/>
+		<TextField fx:id="milDistrictIdField"/>
+		<Label text="Military unit number"/>
+		<TextField fx:id="milUnitNumField"/>
+		<Button text="Add military unit" onMouseClicked="#addUnit" />
+		<Button text="Edit military unit data"/>
+		<Button text="Delete military unit" onMouseClicked="#delUnit"/>
+
+	</VBox>
+
+</AnchorPane>

@@ -1,46 +1,23 @@
 package models;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import org.springframework.jdbc.core.RowMapper;
+import util.StringUtil;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MilitaryUnit {
-	final private SimpleIntegerProperty id = new SimpleIntegerProperty();
-	final private SimpleIntegerProperty tactic_unit_id = new SimpleIntegerProperty();
-	final private SimpleIntegerProperty mil_district_id = new SimpleIntegerProperty();
-	final private SimpleIntegerProperty commander_id = new SimpleIntegerProperty();
-	final private SimpleIntegerProperty part_number = new SimpleIntegerProperty();
+	final private SimpleIntegerProperty id, tacticUnitId, unitNumber, mildistrictId;
+	final private SimpleStringProperty commanderName;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		MilitaryUnit that = (MilitaryUnit) o;
-
-		if (! id.equals(that.id)) return false;
-		if (! tactic_unit_id.equals(that.tactic_unit_id))
-			return false;
-		if (! mil_district_id.equals(that.mil_district_id))
-			return false;
-		if (! commander_id.equals(that.commander_id)) return false;
-		return part_number.equals(that.part_number);
-	}
-
-	@Override
-	public int hashCode() {
-		int result = id.hashCode();
-		result = 31 * result + tactic_unit_id.hashCode();
-		result = 31 * result + mil_district_id.hashCode();
-		result = 31 * result + commander_id.hashCode();
-		result = 31 * result + part_number.hashCode();
-		return result;
-	}
-
-	public MilitaryUnit(int id, int tacticId, int milDistrictId, int commanderId, int partNumber) {
-		this.id.set(id);
-		this.tactic_unit_id.set(tacticId);
-		this.mil_district_id.set(milDistrictId);
-		this.commander_id.set(commanderId);
-		this.part_number.set(partNumber);
+	public MilitaryUnit(int id, int tacticUnitId, String name, int mildisId, int unitNum) {
+		this.id = new SimpleIntegerProperty(id);
+		this.tacticUnitId = new SimpleIntegerProperty(tacticUnitId);
+		this.commanderName = new SimpleStringProperty(name);
+		this.mildistrictId = new SimpleIntegerProperty(mildisId);
+		this.unitNumber = new SimpleIntegerProperty(unitNum);
 	}
 
 	public int getId() {
@@ -55,53 +32,66 @@ public class MilitaryUnit {
 		return id;
 	}
 
-	public int getTactic_unit_id() {
-		return tactic_unit_id.get();
+	public int getTacticUnitId() {
+		return tacticUnitId.get();
 	}
 
-	public void setTactic_unit_id(int tactic_unit_id) {
-		this.tactic_unit_id.set(tactic_unit_id);
+	public void setTacticUnitId(int tacticUnitId) {
+		this.tacticUnitId.set(tacticUnitId);
 	}
 
-	public SimpleIntegerProperty tactic_unit_idProperty() {
-		return tactic_unit_id;
+	public SimpleIntegerProperty tacticUnitIdProperty() {
+		return tacticUnitId;
 	}
 
-	public int getMil_district_id() {
-		return mil_district_id.get();
+	public int getUnitNumber() {
+		return unitNumber.get();
 	}
 
-	public void setMil_district_id(int mil_district_id) {
-		this.mil_district_id.set(mil_district_id);
+	public void setUnitNumber(int unitNumber) {
+		this.unitNumber.set(unitNumber);
 	}
 
-	public SimpleIntegerProperty mil_district_idProperty() {
-		return mil_district_id;
+	public SimpleIntegerProperty unitNumberProperty() {
+		return unitNumber;
 	}
 
-	public int getCommander_id() {
-		return commander_id.get();
+	public int getMildistrictId() {
+		return mildistrictId.get();
 	}
 
-	public void setCommander_id(int commander_id) {
-		this.commander_id.set(commander_id);
+	public void setMildistrictId(int mildistrictId) {
+		this.mildistrictId.set(mildistrictId);
 	}
 
-	public SimpleIntegerProperty commander_idProperty() {
-		return commander_id;
+	public SimpleIntegerProperty mildistrictIdProperty() {
+		return mildistrictId;
 	}
 
-	public int getPart_number() {
-		return part_number.get();
+	public String getCommanderName() {
+		return commanderName.get();
 	}
 
-	public void setPart_number(int part_number) {
-		this.part_number.set(part_number);
+	public void setCommanderName(String commanderName) {
+		this.commanderName.set(commanderName);
 	}
 
-	public SimpleIntegerProperty part_numberProperty() {
-		return part_number;
+	public SimpleStringProperty commanderNameProperty() {
+		return commanderName;
 	}
 
-
+	public static class MilUnitRowMapper implements RowMapper<MilitaryUnit> {
+		@Override
+		public MilitaryUnit mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String name = rs.getString("fullname");
+			if (name == null) name = StringUtil.UNSELECTED;
+			return new MilitaryUnit(
+					rs.getInt("id"),
+					rs.getInt("tacit_unit_id"),
+					name,
+					rs.getInt("mildistrict_id"),
+					rs.getInt("milunit_number")
+			);
+		}
+	}
 }

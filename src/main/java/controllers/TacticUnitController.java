@@ -10,7 +10,6 @@ import models.TacticUnit;
 import util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TacticUnitController implements TabController<TacticUnit>, MilitaryObject<TacticUnit> {
 
@@ -47,10 +46,50 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 
 	}
 
+	public void addTacticUnit(MouseEvent ignored) {
+		if (! inputDataValid()) return;
+		int unitNum = Integer.parseInt(unitNumField.getText());
+		int armyId = Integer.parseInt(armyIdField.getText());
+		String unitType = unitTypeField.getText();
+		if (possibleCommanders.getValue().equals(StringUtil.UNSELECTED)) {
+			MainApplicationController.getDao().addTacticUnitNoCommander(
+					armyId, unitType, unitNum
+			);
+			localUpdate();
+			updateCommander();
+		} else if (! possibleCommanders.getValue().equals(StringUtil.KEEP)) {
+			String commanderName = possibleCommanders.getValue();
+			MainApplicationController.getDao().addTacticUnit(
+					armyId, commanderName, unitType, unitNum
+			);
+			localUpdate();
+			updateCommander();
+		}
+		updateFreeOfficers();
+	}
 
 	@Override
-	public void updateFreeOfficers() {
-		updateFreeOfficers(TacticUnit.class);
+	public boolean inputDataValid() {
+		String text = armyIdField.getText();
+		if (text.isEmpty() || ! StringUtil.isNumeric(text)) return false;
+		text = unitNumField.getText();
+		if (text.isEmpty() || ! StringUtil.isNumeric(text)) return false;
+		text = unitTypeField.getText();
+		if (text.isEmpty()) return false;
+		return true;
+	}
+
+	@Override
+	public void updateCommander() {
+		TacticUnit unit = getSelectedRow();
+		if (unit == null) return;
+		if (possibleCommanders.getValue().equals(unit.getCommanderName())) return;
+		updateCommander(TacticUnit.class, unit.getId());
+	}
+
+	@Override
+	public ChoiceBox<String> getFreeOfficerBox() {
+		return possibleCommanders;
 	}
 
 	@Override
@@ -69,49 +108,8 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 	}
 
 	@Override
-	public void updateCommander() {
-		TacticUnit unit = getSelectedRow();
-		if (unit == null) return;
-		if (possibleCommanders.getValue().equals(unit.getCommanderName()))return;
-		updateCommander(TacticUnit.class, unit.getId());
-	}
-
-	@Override
-	public ChoiceBox<String> getFreeOfficerBox() {
-		return possibleCommanders;
-	}
-
-	public void addTacticUnit(MouseEvent ignored) {
-		if (! inputDataValid()) return;
-		int unitNum = Integer.parseInt(unitNumField.getText());
-		int armyId = Integer.parseInt(armyIdField.getText());
-		String unitType = unitTypeField.getText();
-		if (possibleCommanders.getValue().equals(StringUtil.UNSELECTED)) {
-//			MainApplicationController.getDao().addTacticUnitNoCommander(
-//					armyId, unitType, unitNum
-//			);
-//			localUpdate();
-			updateCommander();
-		} else if (! possibleCommanders.getValue().equals(StringUtil.KEEP)) {
-//			String commanderName = possibleCommanders.getValue();
-//			MainApplicationController.getDao().addTacticUnit(
-//					armyId, commanderName, unitType, unitNum
-//			);
-//			localUpdate();
-			updateCommander();
-		}
-		updateFreeOfficers();
-	}
-
-	@Override
-	public boolean inputDataValid() {
-		String text = armyIdField.getText();
-		if (text.isEmpty() || ! StringUtil.isNumeric(text)) return false;
-		text = unitNumField.getText();
-		if (text.isEmpty() || ! StringUtil.isNumeric(text)) return false;
-		text = unitTypeField.getText();
-		if (text.isEmpty()) return false;
-		return true;
+	public void updateFreeOfficers() {
+		updateFreeOfficers(TacticUnit.class);
 	}
 
 	@Override
@@ -119,6 +117,7 @@ public class TacticUnitController implements TabController<TacticUnit>, Military
 		globalUpdate();
 
 	}
+
 
 	@Override
 	public void globalUpdate() {

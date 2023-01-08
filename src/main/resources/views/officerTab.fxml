@@ -12,12 +12,12 @@
 		<TableView fx:id="officerTable" prefHeight="300">
 			<columns>
 				<TableColumn fx:id="id" text="id"/>
-				<TableColumn fx:id="fullname" text="fullname"/>
-				<TableColumn fx:id="militaryRank"/>
-				<TableColumn fx:id="education"/>
-				<TableColumn fx:id="rankDate"/>
-				<TableColumn fx:id="major"/>
-				<TableColumn fx:id="commType"/>
+				<TableColumn fx:id="fullname" text="Name"/>
+				<TableColumn fx:id="militaryRank" text="Military rank"/>
+				<TableColumn fx:id="education" text="Education"/>
+				<TableColumn fx:id="rankDate" text="Rank date"/>
+				<TableColumn fx:id="major" text="Major"/>
+				<TableColumn fx:id="commType" text="Commander type"/>
 			</columns>
 		</TableView>
 		<Button text="Add officer" onMouseClicked="#addOfficer"/>

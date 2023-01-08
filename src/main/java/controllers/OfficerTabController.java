@@ -90,28 +90,28 @@ public class OfficerTabController {
 		Officer officer = officerTable.getItems().get(selectedRows.get(0).getRow());
 		int id = officer.getId();
 		LocalDate date = rankDatePicker.getValue();
-		if (date!= null)
-		{
-			MainApplicationController.getDao().updateOfficerDate(id,date);
+		if (date != null) {
+			MainApplicationController.getDao().updateOfficerDate(id, date);
 		}
 		String name = nameField.getText();
-		if (!name.isBlank())
-		{
-			MainApplicationController.getDao().updateOfficerName(id,name);
+		if (! name.isBlank()) {
+			MainApplicationController.getDao().updateOfficerName(id, name);
 		}
-
-		String education = educationField.getText();
-		if (!education.isBlank())
+		String milRank = milRankField.getText();
+		if (!milRank.isBlank())
 		{
-			MainApplicationController.getDao().updateOfficerEducation(id,education);
+			MainApplicationController.getDao().updateOfficerRank(id, milRank);
+		}
+		String education = educationField.getText();
+		if (! education.isBlank()) {
+			MainApplicationController.getDao().updateOfficerEducation(id, education);
 		}
 		String major = majorField.getText();
-		if (!major.isBlank())
-		{
-			MainApplicationController.getDao().updateOfficerMajor(id,major);
+		if (! major.isBlank()) {
+			MainApplicationController.getDao().updateOfficerMajor(id, major);
 		}
 		String type = typeBox.getValue();
-		MainApplicationController.getDao().updateOfficerType(id,type);
+		MainApplicationController.getDao().updateOfficerType(id, type);
 		updateData();
 	}
 

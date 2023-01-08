@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CrewTabController"
+            prefHeight="400.0" prefWidth="600.0">
+<VBox>
+	<TableView fx:id="crewTable">
+		<columns>
+			<TableColumn fx:id="id" text="Id"/>
+			<TableColumn fx:id="fullname" text="FullName"/>
+			<TableColumn fx:id="crew_number" text="Crew number"/>
+			<TableColumn fx:id="company_id" text="Company id"/>
+		</columns>
+	</TableView>
+	<Label text="Commanders"/>
+	<ChoiceBox fx:id="possibleCommanders"/>
+	<Label text="crew number "/>
+	<TextField fx:id="crewNumTextField"/>
+	<Label text="company id"/>
+	<TextField fx:id="companyIdTextField"/>
+	<Button  text="Add crew" onMouseClicked="#addCrew"/>
+	<Button  text="Edit crew data" onMouseClicked="#editCrew"/>
+	<Button  text="Delete crew data" onMouseClicked="#delCrew"/>
+
+</VBox>
+</AnchorPane>

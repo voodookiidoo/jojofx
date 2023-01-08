@@ -2,24 +2,29 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.skin.TabPaneSkin.TabHeaderArea?>
 <VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controllers.MainApplicationController">
-	<TabPane fx:id="tabPane" prefHeight="800" prefWidth="600" tabMinWidth="100">
-		<Tab  closable="false" text="MilitaryDistricts">
-			<fx:include fx:id="militaryDistrictTab" source="milDistrictTab.fxml"/>
-		</Tab>
-		<Tab  closable="false" text="Officers">
-			<fx:include fx:id="officerTab" source="officerTab.fxml"/>
-		</Tab>
-		<Tab closable="false" text="Armies" onSelectionChanged="#updateArmy" >
+	<TabPane fx:id="tabPane" prefHeight="800" prefWidth="1200" tabMinWidth="100">
+		<Tab closable="false" text="Armies" onSelectionChanged="#updateArmy">
 			<fx:include fx:id="armyTab" source="armyTab.fxml"/>
 		</Tab>
 		<Tab closable="false" text="Tactic Units" onSelectionChanged="#updateTacticUnit">
 			<fx:include source="tacticUnitTab.fxml" fx:id="tacticUnitTab"/>
 		</Tab>
+		<Tab closable="false" text="Military Units">
+			<fx:include source="milUnitTab.fxml" fx:id="miltUnitTab"/>
+		</Tab>
+		<Tab closable="false" text="MilitaryDistricts">
+			<fx:include fx:id="militaryDistrictTab" source="milDistrictTab.fxml"/>
+		</Tab>
+		<Tab closable="false" text="Officers" onSelectionChanged="#updateOfficers">
+			<fx:include fx:id="officerTab" source="officerTab.fxml"/>
+		</Tab>
 		<Tab closable="false" text="Companies" onSelectionChanged="#updateCompanies">
 			<fx:include source="companyTab.fxml" fx:id="companyTab"/>
+		</Tab>
+		<Tab closable="false" text="Crews" onSelectionChanged="#updateCrews">
+			<fx:include source="crewTab.fxml" fx:id="crewTab"/>
 		</Tab>
 	</TabPane>
 

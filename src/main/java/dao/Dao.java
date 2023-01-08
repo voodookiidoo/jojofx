@@ -1,5 +1,6 @@
 package dao;
 
+import javafx.scene.control.TableColumn;
 import models.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -18,13 +19,14 @@ public class Dao {
 		put(MilitaryDistrict.class, "mildistrict");
 		put(MilitaryUnit.class, "milunit");
 		put(Company.class, "company");
+		put(Crew.class, "crew");
 
 	}};
 	private static final Map<Class<?>, String> upperTableNamesMap = new HashMap<>() {{
 		put(TacticUnit.class, "army");
 		put(MilitaryUnit.class, "tacticunit");
 		put(Company.class, "milunit");
-
+		put(Crew.class, "company");
 	}};
 	private final JdbcTemplate jdbcTemplate;
 
@@ -107,8 +109,7 @@ public class Dao {
 	public List<TacticUnit> getTacticUnits() {
 		return jdbcTemplate.query(
 				"select tacticunit.id, fullname, army_id, unit_type, unit_number from tacticunit left join officers on officers.id = commander_id;",
-				new TacticUnit.TacticUnitRowMapper()
-		);
+				new TacticUnit.TacticUnitRowMapper());
 	}
 
 	public void addTacticUnitNoCommander(int armyId, String unitType, int unitNum) {
@@ -120,7 +121,7 @@ public class Dao {
 	public void addTacticUnit(int armyId, String commanderName, String unitType, int unitNum) {
 		jdbcTemplate.update(
 				"insert into tacticunit(army_id, commander_id, unit_type, unit_number) " +
-						"values (?, (select id from officers where fullname = ?), ?, ?)", new Object[]{armyId, commanderName, unitType, unitNum});
+						"values (?, (select id from officers where fullname = ?), ?, ?)", armyId, commanderName, unitType, unitNum);
 	}
 
 	public void setNullTacticUnitCommander(int unitId) {
@@ -136,7 +137,7 @@ public class Dao {
 
 	/**
 	 * @param cls Reflecting class of the object to be deleted
-	 * @param id  Id of the object to be deleted
+	 * @param id  id of the object to be deleted
 	 */
 	public <T> void deleteObjById(Class<T> cls, int id) {
 		String tableName = tableNamesMap.get(cls);
@@ -145,6 +146,7 @@ public class Dao {
 		);
 		jdbcTemplate.update(sqlString, id);
 	}
+
 
 	/**
 	 * @param cls           Reflecting class of the object to be added
@@ -171,22 +173,28 @@ public class Dao {
 					objNum,
 					upId
 			);
-//				officerName, armyNum)
-
 		}
-//		jdbcTemplate.update("insert into army (commander_id, army_number)" +
-//						"values ((select id from officers where fullname = ?), ?);",
-//				officerName, armyNum)
-
-
 	}
 
 	public <T> void updateHigherObjId(Class<T> cls, int id, int upId) {
 		//TODO реализовать обновление айдишника сущности выше по рангу
+		String tableName = tableNamesMap.get(cls);
+		String higherTableName = upperTableNamesMap.get(cls);
+		String sqlString =
+				"update %s set %s_id=? where id = ?".formatted(tableName,
+						higherTableName);
+		jdbcTemplate.update(sqlString, upId, id);
 	}
 
 	public <T> void updateOjbNum(Class<T> cls, int id, int objNum) {
 		//TODO реализовать обновление номера объекта
+		String tableName = tableNamesMap.get(cls);
+		String sqlString =
+				"update %s set %s_number=? where id=?".formatted(
+						tableName,
+						tableName
+				);
+		jdbcTemplate.update(sqlString, objNum, id);
 	}
 
 	public List<Company> getCompanies() {
@@ -238,5 +246,42 @@ public class Dao {
 				"delete from officers where id=?",
 				id
 		);
+	}
+
+	public void updateOfficerRank(int id, String milRank) {
+		jdbcTemplate.update(
+				"update officers set military_rank=? where id=?",
+				milRank, id
+		);
+	}
+
+	public List<Crew> getCrews() {
+		return jdbcTemplate.query(
+				"select crew.id, crew_number, crew.company_id, officers.fullname from crew left join officers on crew.commander_id = officers.id",
+				new Crew.CrewRowMapper());
+
+	}
+
+	public List<MilitaryUnit> getMilUnits() {
+		return jdbcTemplate.query(
+				"select milunit.id,tacit_unit_id,mildistrict_id,fullname,milunit_number " +
+						"from milunit left join officers on milunit.commander_id = officers.id",
+				new MilitaryUnit.MilUnitRowMapper()
+		);
+	}
+
+	public List<String> getFreeOfficersForMilUnit() {;
+		String sqlString = "select fullname from officers where id not in (select commander_id from milunit where commander_id is not null);";
+		return jdbcTemplate.query(sqlString,
+				(rs, rowNum) -> rs.getString("fullname"));
+	}
+
+	public void addMilUnit(int tactiUnitId, int mildistrictId, String commanderName, int milUnitNum) {
+		String sqlString = "insert into milunit(tacit_unit_id,mildistrict_id, commander_id, milunit_number)" +
+				"values(?,?,?,?)";
+		if (commanderName.equals(StringUtil.UNSELECTED)) commanderName = null;
+		jdbcTemplate.update(sqlString,
+				tactiUnitId, mildistrictId, commanderName, milUnitNum);
+
 	}
 }
