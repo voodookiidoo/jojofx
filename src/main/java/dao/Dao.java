@@ -1,6 +1,5 @@
 package dao;
 
-import javafx.scene.control.TableColumn;
 import models.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -20,6 +19,8 @@ public class Dao {
 		put(MilitaryUnit.class, "milunit");
 		put(Company.class, "company");
 		put(Crew.class, "crew");
+		put(Squad.class, "squad");
+		put(Militech.class, "militech");
 
 	}};
 	private static final Map<Class<?>, String> upperTableNamesMap = new HashMap<>() {{
@@ -27,6 +28,7 @@ public class Dao {
 		put(MilitaryUnit.class, "tacticunit");
 		put(Company.class, "milunit");
 		put(Crew.class, "company");
+		put(Squad.class, "crew");
 	}};
 	private final JdbcTemplate jdbcTemplate;
 
@@ -270,7 +272,8 @@ public class Dao {
 		);
 	}
 
-	public List<String> getFreeOfficersForMilUnit() {;
+	public List<String> getFreeOfficersForMilUnit() {
+		;
 		String sqlString = "select fullname from officers where id not in (select commander_id from milunit where commander_id is not null);";
 		return jdbcTemplate.query(sqlString,
 				(rs, rowNum) -> rs.getString("fullname"));
@@ -282,6 +285,83 @@ public class Dao {
 		if (commanderName.equals(StringUtil.UNSELECTED)) commanderName = null;
 		jdbcTemplate.update(sqlString,
 				tactiUnitId, mildistrictId, commanderName, milUnitNum);
+
+	}
+
+	public List<Squad> getSquads() {
+		return jdbcTemplate.query(
+				"select squad.id, squad_number, squad.crew_id, officers.fullname from squad left join officers on squad.commander_id = officers.id",
+				new Squad.SquadRowMapper());
+
+	}
+
+	public List<Militech> getTechs() {
+		return jdbcTemplate.query(
+				"select id, tech_type, description, amount " +
+						"from militech",
+				new Militech.MilitechRowMapper()
+		);
+	}
+
+	public void addTech(String description, String type, int amount) {
+		jdbcTemplate.update("insert into militech(tech_type, description, amount)" +
+				"values (?, ?, ?)", type, description, amount);
+	}
+
+	public void updateMilitechType(int techId, String type) {
+		jdbcTemplate.update(
+				"update militech set tech_type=? where id=?;",
+				type, techId
+		);
+	}
+
+	public void updateMilitechDesc(int techId, String description) {
+		jdbcTemplate.update(
+				"update militech set description=? where id=?",
+				description, techId
+		);
+	}
+
+	public void updateMilitechAmount(int techId, int amount) {
+		jdbcTemplate.update(
+				"update militech set amount=? where id=?",
+				amount, techId
+		);
+	}
+
+	public List<MiliStruct> getMiliStructs() {
+		return jdbcTemplate.query(
+				"select id, struct_type, description, amount " +
+						"from infrastructure",
+				new MiliStruct.MiliStructRowMapper()
+		);
+	}
+
+	public void addMiliStruct(String description, String type, int amount) {
+		jdbcTemplate.update("insert into infrastructure(struct_type, description, amount)" +
+				"values (?, ?, ?)", type, description, amount);
+
+	}
+
+	public void updateMiliStructType(int techId, String type) {
+		jdbcTemplate.update(
+				"update infrastructure set struct_type=? where id=?;",
+				type, techId
+		);
+	}
+
+	public void updateMiliStructDesc(int techId, String description) {
+		jdbcTemplate.update(
+				"update infrastructure set description=? where id=?",
+				description, techId
+		);
+	}
+
+	public void updateMiliStructAmount(int techId, int amount) {
+		jdbcTemplate.update(
+				"update infrastructure set amount=? where id=?",
+				amount, techId
+		);
 
 	}
 }

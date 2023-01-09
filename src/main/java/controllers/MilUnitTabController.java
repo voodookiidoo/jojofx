@@ -97,4 +97,9 @@ public class MilUnitTabController {
 		if (data.isBlank() || !StringUtil.isNumeric(data)) return false;
 		return ! officerBox.getValue().equals(StringUtil.KEEP);
 	}
+
+	public void update() {
+		updateData();
+
+	}
 }

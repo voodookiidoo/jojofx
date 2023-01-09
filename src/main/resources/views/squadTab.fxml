@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.SquadTabController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="squadTable">
+			<columns>
+				<TableColumn fx:id="id" text="Id"/>
+				<TableColumn fx:id="fullname" text="FullName"/>
+				<TableColumn fx:id="squad_number" text="Squad number"/>
+				<TableColumn fx:id="crew_id" text="Crew id"/>
+			</columns>
+		</TableView>
+		<Label text="Commanders"/>
+		<ChoiceBox fx:id="possibleCommanders"/>
+		<Label text="squad number"/>
+		<TextField fx:id="squadNumTextField"/>
+		<Label text="crew id"/>
+		<TextField fx:id="crewIdTextField"/>
+		<Button  text="Add squad" onMouseClicked="#addSquad"/>
+		<Button  text="Edit squad data" onMouseClicked="#editSquad"/>
+		<Button  text="Delete squad data" onMouseClicked="#delSquad"/>
+
+	</VBox>
+</AnchorPane>

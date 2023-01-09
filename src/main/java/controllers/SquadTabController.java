@@ -10,48 +10,35 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import models.Crew;
+import models.Squad;
 import util.StringUtil;
 
 import java.util.ArrayList;
 
-public class CrewTabController implements MilitaryObject<Crew>, TabController<Crew> {
-
+public class SquadTabController implements TabController<Squad>, MilitaryObject<Squad> {
 	@FXML
-	public TableView<Crew> crewTable;
+	public TableView<Squad> squadTable;
 	@FXML
-	public TableColumn id, fullname, crew_number, company_id;
+	public TableColumn id, fullname, squad_number, crew_id;
 	@FXML
 	public ChoiceBox<String> possibleCommanders;
 	@FXML
-	public ObservableList<Crew> crews = FXCollections.observableList(new ArrayList<>());
+	public TextField squadNumTextField, crewIdTextField;
 	@FXML
-	public TextField crewNumTextField, companyIdTextField;
+	ObservableList<Squad> squads = FXCollections.observableList(new ArrayList<>());
 	@FXML
 	public PropertyValueFactory<Object, Object>
 			idValFactory = new PropertyValueFactory<>("id"),
 			fullnameValFactory = new PropertyValueFactory<>("commanderName"),
-			crewNumValFactory = new PropertyValueFactory<>("crewNumber"),
-			companyIdValFactory = new PropertyValueFactory<>("companyId");
-
-
-	@FXML
-	public void initialize() {
-		id.setCellValueFactory(idValFactory);
-		fullname.setCellValueFactory(fullnameValFactory);
-		crew_number.setCellValueFactory(crewNumValFactory);
-		company_id.setCellValueFactory(companyIdValFactory);
-		crews.addAll(MainApplicationController.getDao().getCrews());
-		crewTable.setItems(crews);
-		updateFreeOfficers();
-	}
+			squadNumValFactory = new PropertyValueFactory<>("squadNum"),
+			crewIdValFactory = new PropertyValueFactory<>("crewId");
 
 	@Override
 	public void updateCommander() {
-		Crew crew = getSelectedRow();
-		if (crew == null) return;
-		if (getFreeOfficerBox().getValue().equals(crew.getCommanderName())) return;
-		updateCommander(Crew.class, crew.getId());
-
+		Squad squad = getSelectedRow();
+		if (squad == null) return;
+		if (getFreeOfficerBox().getValue().equals(squad.getCommanderName())) return;
+		updateCommander(Squad.class, squad.getId());
 	}
 
 	@Override
@@ -62,27 +49,23 @@ public class CrewTabController implements MilitaryObject<Crew>, TabController<Cr
 	@Override
 	public void addObj() {
 		if (! inputDataValid()) return;
-		addObj(Crew.class);
+		addObj(Squad.class);
 		localUpdate();
 	}
 
 	@Override
 	public TextField getHigherIdField() {
-		return companyIdTextField;
+		return crewIdTextField;
 	}
 
 	@Override
 	public TextField getNumField() {
-		return crewNumTextField;
+		return squadNumTextField;
 	}
 
 	@Override
 	public void updateFreeOfficers() {
-		updateFreeOfficers(Crew.class);
-	}
-
-	public void addCrew(MouseEvent mouseEvent) {
-		addObj();
+	updateFreeOfficers(Squad.class);
 	}
 
 	@Override
@@ -97,66 +80,81 @@ public class CrewTabController implements MilitaryObject<Crew>, TabController<Cr
 
 	@Override
 	public void globalUpdate() {
-		crews.clear();
-		crews.addAll(MainApplicationController.getDao().getCrews());
+		squads.clear();
+		squads.addAll(MainApplicationController.getDao().getSquads());
 		updateFreeOfficers();
 	}
 
 	@Override
-	public TableView<Crew> getTable() {
-		return crewTable;
+	public TableView<Squad> getTable() {
+		return squadTable;
 	}
 
-	public void editCrew(MouseEvent mouseEvent) {
-		Crew crew = getSelectedRow();
-		if (crew == null) return;
+	@FXML
+	public void initialize() {
+		id.setCellValueFactory(idValFactory);
+		fullname.setCellValueFactory(fullnameValFactory);
+		squad_number.setCellValueFactory(squadNumValFactory);
+		crew_id.setCellValueFactory(crewIdValFactory);
+		squads.addAll(MainApplicationController.getDao().getSquads());
+		squadTable.setItems(squads);
+		updateFreeOfficers();
+	}
+
+	@FXML
+	public void addSquad(MouseEvent mouseEvent) {
+		addObj();
+	}
+
+	@FXML
+	public void editSquad(MouseEvent mouseEvent) {
+		Squad squad = getSelectedRow();
+		if (squad == null) return;
 		String commanderName = getFreeOfficerBox().getValue();
 		if (! commanderName.equals(StringUtil.KEEP)) {
 			if (commanderName.equals(StringUtil.UNSELECTED)
-					&& ! crew.getCommanderName().equals(StringUtil.UNSELECTED)) {
+					&& ! squad.getCommanderName().equals(StringUtil.UNSELECTED)) {
 				// если требуется снять командира, а командир назначен
 				MainApplicationController.getDao().updateCommanderForObj(
-						Crew.class, crew.getId(), commanderName
+						Squad.class, squad.getId(), commanderName
 				);
 				// добавить командира в список доступных
-				getFreeOfficerBox().getItems().add(crew.getCommanderName());
+				getFreeOfficerBox().getItems().add(squad.getCommanderName());
 				getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
-				crew.setCommanderName(StringUtil.UNSELECTED);
+				squad.setCommanderName(StringUtil.UNSELECTED);
 			} else if (! commanderName.equals(StringUtil.UNSELECTED)
-					&& crew.getCommanderName().equals(StringUtil.UNSELECTED)) {
+					&& squad.getCommanderName().equals(StringUtil.UNSELECTED)) {
 				// если командир не назначен, но его нужно назначить
 				MainApplicationController.getDao().updateCommanderForObj(
-						Crew.class, crew.getId(), commanderName
+						Squad.class, squad.getId(), commanderName
 				);
 				// командир назначен, значит из доступных его нужно удалить
 				getFreeOfficerBox().getItems().remove(commanderName);
 				getFreeOfficerBox().setValue(StringUtil.UNSELECTED);
-				crew.setCommanderName(commanderName);
+				squad.setCommanderName(commanderName);
 
 			}
 		}
-		String crewNumStr = crewNumTextField.getText();
+		String crewNumStr = squadNumTextField.getText();
 		if (StringUtil.isNumeric(crewNumStr)) {
 			MainApplicationController.getDao().updateOjbNum(Crew.class,
-					crew.getId(), Integer.parseInt(crewNumStr));
+					squad.getId(), Integer.parseInt(crewNumStr));
 		}
-		String companyIdStr = companyIdTextField.getText();
+		String companyIdStr = crewIdTextField.getText();
 		if (StringUtil.isNumeric(companyIdStr)) {
 			MainApplicationController.getDao().updateHigherObjId(Crew.class,
-					crew.getId(), Integer.parseInt(companyIdStr));
+					squad.getId(), Integer.parseInt(companyIdStr));
 		}
-		updateData();
-	}
-
-	public void updateData() {
 		globalUpdate();
+
 	}
 
-	public void delCrew(MouseEvent mouseEvent) {
-		Crew crew = getSelectedRow();
-		if (crew == null) return;
-		deleteById(Crew.class, crew.getId());
-		crews.remove(crew);
+	@FXML
+	public void delSquad(MouseEvent mouseEvent) {
+		Squad squad = getSelectedRow();
+		if (squad == null) return;
+		deleteById(Squad.class, squad.getId());
+		squads.remove(squad);
 		updateFreeOfficers();
 	}
 }

@@ -18,6 +18,12 @@ public class MainApplicationController {
 	OfficerTabController officerTabController;
 	@FXML
 	CrewTabController crewTabController;
+	@FXML
+	SquadTabController squadTabController;
+	@FXML
+	MilUnitTabController milUnitTabController;
+	@FXML
+	MilitechController militechTabController;
 
 	public static Dao getDao() {
 		return dao;
@@ -52,5 +58,22 @@ public class MainApplicationController {
 
 	public void updateCrews(Event event) {
 		crewTabController.updateData();
+	}
+
+	public void updateSquads(Event event) {
+		squadTabController.globalUpdate();
+	}
+
+	public void updateMilitech(Event event) {
+		militechTabController.updateData();
+
+	}
+
+	public void updateMilUnit(Event event) {
+		milUnitTabController.update();
+	}
+
+	public void updateIfrastructure(Event event) {
+
 	}
 }

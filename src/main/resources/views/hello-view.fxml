@@ -11,8 +11,8 @@
 		<Tab closable="false" text="Tactic Units" onSelectionChanged="#updateTacticUnit">
 			<fx:include source="tacticUnitTab.fxml" fx:id="tacticUnitTab"/>
 		</Tab>
-		<Tab closable="false" text="Military Units">
-			<fx:include source="milUnitTab.fxml" fx:id="miltUnitTab"/>
+		<Tab closable="false" text="Military Units" onSelectionChanged="#updateMilUnit">
+			<fx:include source="milUnitTab.fxml" fx:id="milUnitTab"/>
 		</Tab>
 		<Tab closable="false" text="MilitaryDistricts">
 			<fx:include fx:id="militaryDistrictTab" source="milDistrictTab.fxml"/>
@@ -25,6 +25,15 @@
 		</Tab>
 		<Tab closable="false" text="Crews" onSelectionChanged="#updateCrews">
 			<fx:include source="crewTab.fxml" fx:id="crewTab"/>
+		</Tab>
+		<Tab closable="false" text="Squads" onSelectionChanged="#updateSquads">
+			<fx:include source="squadTab.fxml" fx:id="squadTab"/>
+		</Tab>
+		<Tab closable="false" text="Military tech" onSelectionChanged="#updateMilitech">
+			<fx:include source="militechTab.fxml" fx:id="militechTab"/>
+		</Tab>
+		<Tab closable="false" text="Military infrastructure" onSelectionChanged="#updateIfrastructure">
+			<fx:include source="miliStructTab.fxml" fx:id="milistructTab"/>
 		</Tab>
 	</TabPane>
 

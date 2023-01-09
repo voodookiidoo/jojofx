@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.MilistructController"
+            prefHeight="400.0" prefWidth="600.0">
+	<VBox>
+		<TableView fx:id="milistructTable">
+			<columns>
+				<TableColumn fx:id="id" text="Tech id"/>
+				<TableColumn fx:id="structType" text="Structure type"/>
+				<TableColumn fx:id="description" text="Description"/>
+				<TableColumn fx:id="amount" text="Amount"/>
+			</columns>
+		</TableView>
+		<Label text="Tech type"/>
+		<TextField fx:id="structTypeField"/>
+		<Label text="Description"/>
+		<TextField fx:id="descField"/>
+		<Label text="Amount"/>
+		<TextField fx:id="amountField"/>
+		<Button text="Add technique" onMouseClicked="#addStruct"/>
+		<Button text="Edit technique data" onMouseClicked="#editStruct"/>
+		<Button text="Delete technique data" onMouseClicked="#delStruct"/>
+	</VBox>
+
+</AnchorPane>
